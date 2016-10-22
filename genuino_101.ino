@@ -1,13 +1,13 @@
-
+// определим необходимые переменные
 const int pin_button = 6;
-
 const int pin_rele = 7;
-
 const int pin_datchik_sveta = 10;
+const int porog = 200;
+char user_choice = "on";
 
 //функция ручного режима управления лампой
-void hands_mode( boolean light ){
-  if ( light ){
+void hands_mode( char light ){
+  if ( light == "on" ){
     digitalWrite( pin_rele, LOW ); // не подаем напряжение на  реле
   }
   else{
@@ -21,6 +21,12 @@ void hands_mode( boolean light ){
 void auto_mode(){
   int light = 0;
   light = analogRead(pin_datchik_sveta);
+  if ( light < porog ){
+    digitalWrite(pin_rele, LOW);
+  }
+  else{
+    digitalWrite(pin_rele, HIGH);
+  }
 }
 
 
@@ -33,5 +39,13 @@ pinMode(pin_rele, OUTPUT);
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+  if( user_choice == "on" || user_choice == "off" ){
+    hands_mode(user_choice);
+  }
+
+  if( user_choice == "auto"){
+    auto_mode();
+  }
 
 }
